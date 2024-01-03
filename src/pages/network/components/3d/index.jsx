@@ -1,188 +1,73 @@
-import React, { useRef, useEffect } from "react"
-import echarts from "echarts"
-import axios from "@/services"
-import "echarts-gl"
-import store from "../../store"
-import { reaction } from "mobx"
-import Section from "@/components/section"
+import React, { useRef, useEffect } from 'react';
+import * as d3 from 'd3';
 
-const option_echartsnetwork = {
-	animation: true,
-	animationThreshold: 2000,
-	animationDuration: 1000,
-	animationEasing: "cubicOut",
-	animationDelay: 0,
-	animationDurationUpdate: 300,
-	animationEasingUpdate: "cubicOut",
-	animationDelayUpdate: 0,
-	color: [
-		"#c23531",
-		"#2f4554",
-		"#61a0a8",
-		"#d48265",
-		"#749f83",
-		"#ca8622",
-		"#bda29a",
-		"#6e7074",
-		"#546570",
-		"#c4ccd3",
-		"#f05b72",
-		"#ef5b9c",
-		"#f47920",
-		"#905a3d",
-		"#fab27b",
-		"#2a5caa",
-		"#444693",
-		"#726930",
-		"#b2d235",
-		"#6d8346",
-		"#ac6767",
-		"#1d953f",
-		"#6950a1",
-		"#918597",
-	],
-	visualMap: {
-		show: true,
-		type: "continuous",
-		max: 1.0915669808461772, //读取js文件
-		min: 0, //读取js文件
-		inRange: {
-			color: [
-				"#313695",
-				"#4575b4",
-				"#74add1",
-				"#abd9e9",
-				"#e0f3f8",
-				"#ffffbf",
-				"#fee090",
-				"#fdae61",
-				"#f46d43",
-				"#d73027",
-				"#a50026",
-			],
-			colorAlpha: 0.95, //有修改
-		},
-		seriesIndex: 0,
-		calculable: true,
-		orient: "vertical",
-		showLabel: true,
-		itemWidth: 20,
-		itemHeight: 140,
-	},
-	legend: [
-		{
-			data: [""],
-			selected: {},
-			show: true,
-			padding: 5,
-			itemGap: 10,
-			itemWidth: 25,
-			itemHeight: 14,
-		},
-	],
-	tooltip: {
-		show: true,
-		trigger: "item",
-		triggerOn: "mousemove|click",
-		axisPointer: {
-			type: "line",
-		},
-		textStyle: {
-			fontSize: 14,
-		},
-		borderWidth: 0,
-	},
+// 假设的静态数据
+const data = [
+    { name: '新型冠状病毒::武汉发现不明原因肺炎', value: 20, color: '#ff8c00' },
+    { name: '武汉8名不明原因病毒性肺炎患者已出院', value: 20, color: '#98abc5' },
+    { name: '武汉不明原因肺炎已做好隔离', value: 10, color: '#8a89a6' },
+    { name: '新型冠状病毒传染来源还未找到', value: 10, color: '#89a9' },
+    { name: '春节健康攻略', value: 10, color: '#BB4000' },
+    { name: '口罩', value: 20, color: '#BB4112' },
+    { name: '武汉封城', value: 30, color: '#BB4222' },
+    { name: '野味', value: 10, color: '#BA0011' },
+    { name: '人传人', value: 10, color: '#FF0022' },
+    { name: '春运', value: 10, color: '#EE0033' },
+    { name: '新型冠状病毒', value: 40, color: '#DD0044' },
+    { name: '武汉新型冠状病毒患者新增', value: 30, color: '#CC1111' },
+    { name: '疫情地图', value: 5, color: '#AA2221' },
+    { name: '病毒来源', value: 10, color: '#BB3124' },
+    { name: '疫苗', value: 7, color: '#BB34FF' },
+    // ... 更多数据
+];
 
-	xAxis3D: {
-		nameGap: 20,
-		type: "value",
-		axisLabel: {
-			margin: 8,
-		},
-	},
-	yAxis3D: {
-		nameGap: 20,
-		type: "value",
-		axisLabel: {
-			margin: 8,
-		},
-	},
-	zAxis3D: {
-		//此处有调整，增加了name、nameTextStyle属性
-		name: "Heat(log10)",
-		nameGap: 20,
-		type: "value",
-		axisLabel: {
-			margin: 8,
-		},
-		nameTextStyle: {
-			color: "white",
-		},
-	},
-	grid3D: {
-		boxWidth: 400,
-		boxHeight: 100,
-		boxDepth: 400,
-		viewControl: {
-			autoRotate: false,
-			autoRotateSpeed: 10,
-			rotateSensitivity: 1,
-			distance: 500,
-		},
-	},
-	title: [
-		{
-			text:
-				"\u793e\u4ea4\u7f51\u7edc\u4e2d\u5fc3\u7ed3\u6784\u53ef\u89c6\u5316-2020-1-9",
-		},
-	],
-}
+const PieChart = () => {
+    const ref = useRef();
+
+    useEffect(() => {
+        const svg = d3.select(ref.current);
+        const width = 1000; // SVG 宽度
+        const height = 800; // SVG 高度
+        const radius = Math.min(width, height) / 2; // 饼状图半径
+
+        svg.attr('width', width).attr('height', height);
+        const g = svg.append('g').attr('transform', `translate(${width / 2}, ${height / 2})`);
+
+        const pie = d3.pie().value(d => d.value);
+        const path = d3.arc().outerRadius(radius - 10).innerRadius(0);
+        const label = d3.arc().outerRadius(radius - 40).innerRadius(radius - 40);
+
+        const arcs = g.selectAll('.arc')
+            .data(pie(data))
+            .enter().append('g')
+            .attr('class', 'arc');
+
+        arcs.append('path')
+            .attr('d', path)
+            .attr('fill', d => d.data.color);
+
+    
+        arcs.append('text')
+            .attr('transform', d => {
+                const [x, y] = label.centroid(d);
+                return `translate(${x}, ${y})`; // 可以在这里调整x和y的值来改变文本位置
+            })
+            .attr('dy', '0.35em')
+            .attr('fill', 'white') // 更改文本字体颜色为白色
+            .attr('text-anchor', 'middle')  // 设置文本的对齐方式
+            .text(d => d.data.name);
+    }, []);
+
+    return <svg ref={ref}></svg>;
+};
 
 export default function Index() {
-	const chart = useRef(null)
-	const container = useRef(null)
-
-	useEffect(() => {
-		function getSeries(date) {
-			axios(`weibo_topic_json/${date}.json`).then((res) => {
-				const { min, max } = res
-				chart.current.setOption(
-					{
-						...option_echartsnetwork,
-						visualMap: {
-							...option_echartsnetwork.visualMap,
-							min,
-							max,
-						},
-						series: res.series,
-					},
-					true
-				)
-			})
-		}
-
-		const dispose = reaction(
-			() => store.currentDateFormat,
-			(date) => {
-				getSeries(date)
-			}
-		)
-		function handleClick() {
-			chart.current.on("click", ({ name, componentSubType }) => {
-				if (!componentSubType === "line3D") return
-				store.updateContent(name)
-			})
-		}
-		chart.current = echarts.init(container.current, "light")
-		chart.current.setOption(option_echartsnetwork)
-		handleClick()
-		getSeries(store.currentDate.format("YYYY-M-D"))
-		return dispose
-	}, [])
-
-	return (
-		<Section title="舆情分布">
-			<div className="chart-container" ref={container} />
-		</Section>
-	)
+    return (
+        <div>
+            <h1>舆情分布饼状图</h1>
+            <div className="chart-container">
+                <PieChart />
+            </div>
+        </div>
+    );
 }

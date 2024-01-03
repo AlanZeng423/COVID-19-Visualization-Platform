@@ -71,7 +71,8 @@ export default function Radar() {
 
 				// 设置桑基图的尺寸和边距
 				const margin = { top: 10, right: 10, bottom: 10, left: 10 };
-				const width = container.current.clientWidth - margin.left - margin.right;
+				// console.log("CC",container.current.clientWidth)
+				const width = container.current.clientWidth - margin.left - margin.right; //690
 				const height = container.current.clientHeight - margin.top - margin.bottom;
 			
 				// 创建SVG元素
