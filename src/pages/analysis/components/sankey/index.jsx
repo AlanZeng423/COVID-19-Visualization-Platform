@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState, useContext } from "react"
-// import echarts from "echarts"
-// import "echarts/map/js/china"
 import * as d3 from "d3"
 import { sankey, sankeyLinkHorizontal} from "d3-sankey"
 import style from "./index.less"

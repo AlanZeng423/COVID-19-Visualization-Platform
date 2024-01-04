@@ -1,6 +1,5 @@
 import React, { useRef, useEffect, useState, useContext } from "react"
-// import echarts from "echarts"
-// import "echarts/map/js/china"
+
 import * as d3 from "d3"
 import style from "./index.less"
 import myContext from "../../../../assets/js/createContext"
@@ -12,15 +11,7 @@ export default function Radar() {
 	const currentType = selectAll.curType
 
 	const container = useRef(null)
-	// const chart = useRef(null)
-	// const tooltip = d3.select(container.current).append("div")
-	// 		.attr("class", "tooltip")
-	// 		.style("opacity", 0)
-	// 		.style("position", "absolute")
-	// 		.style("background-color", "white")
-	// 		.style("padding", "5px")
-	// 		.style("border-radius", "5px")
-	// 		.style("border", "1px solid gray");
+
 	const tooltip = d3
         .select("body")
         .append("div")
@@ -165,11 +156,6 @@ export default function Radar() {
 			.on("mouseout", function() {
 				tooltip.transition().duration(500).style("opacity", 0);
 			})
-		
-	
-
-			// chart.current = echarts.init(container.current)
-			// chart.current.setOption(option)
 			return () => {}
 		})
 	}, [selectAll])

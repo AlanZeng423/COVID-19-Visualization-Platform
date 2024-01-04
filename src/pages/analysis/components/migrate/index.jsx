@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react"
-// import "echarts/map/js/china"
 import { DatePicker, Select } from "antd"
 import style from "./index.less"
 import moment from "moment"

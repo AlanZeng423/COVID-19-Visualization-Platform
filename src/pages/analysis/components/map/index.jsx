@@ -1,6 +1,4 @@
 import React, { useRef, useEffect, useState } from "react"
-// import echarts from "echarts"
-// import "echarts/map/js/china"
 import * as d3 from "d3";
 // import "d3-geo-projection";
 import { BorderBox7 } from "@jiaminghi/data-view-react"
@@ -168,32 +166,7 @@ export default function Radar() {
 						});
 
 						const sortedData = data.sort(compare("value")).slice(0, 5);
-						// const xScale = d3.scaleLinear()
-						// .domain([0, d3.max(sortedData, d => d.value)])
-						// .range([0, 200]);
-
-						// const yScale = d3.scaleBand()
-						// .domain(sortedData.map(d => d.name))
-						// .range([300, 450]) // 在 SVG 下部放置排行榜
-						// .padding(0.1);
-
-						// svg.selectAll(".bar")
-						// 	.data(sortedData)
-						// 	.enter().append("rect")
-						// 	.attr("class", "bar")
-						// 	.attr("x", 500) // 在 SVG 右侧放置排行榜
-						// 	.attr("y", d => yScale(d.name))
-						// 	.attr("width", d => xScale(d.value))
-						// 	.attr("height", yScale.bandwidth());
-
-						// svg.selectAll(".label")
-						// 	.data(sortedData)
-						// 	.enter().append("text")
-						// 	.attr("class", "label")
-						// 	.attr("x", d => 500 + xScale(d.value) + 3)
-						// 	.attr("y", d => yScale(d.name) + yScale.bandwidth() / 2)
-						// 	.attr("dy", ".35em")
-						// 	.text(d => d.value);
+						
 					const xScale = d3.scaleLinear()
 						.domain([0, d3.max(sortedData, d => d.value)])
 						.range([0, 100]);
@@ -251,17 +224,6 @@ export default function Radar() {
 						.text((d, i) => `${i + 1}. ${d.name}`)
 						.style("fill", "white");
 
-
-					// rankGroup.selectAll(".label")
-					// .data(sortedData)
-					// .enter().append("text")
-					// .attr("class", "label")
-					// .attr("x", -5) // 将文本位置设置在条形图左侧
-					// .attr("y", d => yScale(`${sortedData.indexOf(d) + 1}. ${d.name}`) + yScale.bandwidth() / 2)
-					// .attr("dy", ".35em")
-					// .style("text-anchor", "end") // 确保文本向左对齐
-					// .text(d => d.value);
-
     
 				}
 
@@ -269,18 +231,6 @@ export default function Radar() {
 				else {
 					return;
 				}
-
-				// chart.current = echarts.init(container.current)
-				// chart.current.setOption(option)
-
-				// chart.current.on("click", (e) => {
-				// 	if (currentLevel === "province") {
-				// 		setCurrentMap(e.name)
-				// 		setCurrentLevel("city")
-				// 		setVisible(true)
-				// 	}
-				// })
-
 				return () => {}
 			},
 			[currentBtn, currentDate]
